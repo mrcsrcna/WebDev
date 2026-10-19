@@ -34,7 +34,7 @@
         background-attachment: fixed;
       }
 
-      /* Film grain overlay */
+    
       body::before {
         content: "";
         position: fixed;
@@ -89,14 +89,14 @@
         aspect-ratio: 2 / 1;
       }
 
-      /* Hover effect only on devices that actually hover (not touch screens) */
+      
       @media (hover: hover) {
         .tile:hover {
           transform: rotate(-0.6deg) scale(1.01);
         }
       }
 
-      /* Tablets and below */
+     
       @media (max-width: 767.98px) {
         :root {
           --tile-border: 4px;
@@ -107,7 +107,7 @@
         }
       }
 
-      /* Phones */
+      
       @media (max-width: 575.98px) {
         :root {
           --tile-border: 3px;
@@ -122,14 +122,14 @@
         }
       }
 
-      /* Large screens: keep the grid from getting huge */
+      
       @media (min-width: 1800px) {
         .container {
           max-width: 1400px;
         }
       }
 
-      /* Respect reduced-motion settings */
+      
       @media (prefers-reduced-motion: reduce) {
         .tile {
           transition: none;
@@ -141,7 +141,7 @@
   <body>
     <div class="container py-3 py-md-4">
       <div class="row g-2 g-md-3">
-        <!-- Row 1: big card + 2x2 small cards (stacks on phones) -->
+
         <div class="col-12 col-md-6">
           <div class="card tile tile-square">
             <img src="img1.jpg" alt="Card 1" loading="lazy" />
@@ -173,7 +173,7 @@
           </div>
         </div>
 
-        <!-- Row 2: 1 wide + 2 side by side on phones, 3 across on tablets and up -->
+        
         <div class="col-12 col-md-4">
           <div class="card tile tile-wide">
             <img src="img15.jpg" alt="Card 4" loading="lazy" />
@@ -212,7 +212,7 @@
           </div>
         </div>
 
-        <!-- Row 4: stacked on phones, side by side from 576px up -->
+
         <div class="col-12 col-sm-6">
           <div class="card tile tile-banner">
             <img src="img4.jpg" alt="Card 11" loading="lazy" />
