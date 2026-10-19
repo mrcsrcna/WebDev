@@ -18,21 +18,23 @@
         --blue-mid: #274a77;
         --blue-faded: #4a7399;
         --cream: #efe6d2;
+        --tile-border: 6px;
       }
 
       body {
         min-height: 100vh;
-        background:
-          radial-gradient(
-            ellipse at 30% 20%,
-            var(--blue-faded) 0%,
-            var(--blue-mid) 45%,
-            var(--blue-deep) 100%
-          )
-          fixed;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        background: radial-gradient(
+          ellipse at 30% 20%,
+          var(--blue-faded) 0%,
+          var(--blue-mid) 45%,
+          var(--blue-deep) 100%
+        );
+        background-attachment: fixed;
       }
 
-
+      /* Film grain overlay */
       body::before {
         content: "";
         position: fixed;
@@ -44,7 +46,7 @@
         background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
       }
 
-
+      /* Soft vignette */
       body::after {
         content: "";
         position: fixed;
@@ -61,14 +63,10 @@
       .tile {
         overflow: hidden;
         background-color: #f1f1f1;
-        border: 6px solid var(--cream);
+        border: var(--tile-border) solid var(--cream);
         border-radius: 4px;
         box-shadow: 0 8px 18px rgba(5, 12, 28, 0.45);
         transition: transform 0.3s ease;
-      }
-
-      .tile:hover {
-        transform: rotate(-0.6deg) scale(1.01);
       }
 
       .tile img {
@@ -90,93 +88,139 @@
       .tile-banner {
         aspect-ratio: 2 / 1;
       }
+
+      /* Hover effect only on devices that actually hover (not touch screens) */
+      @media (hover: hover) {
+        .tile:hover {
+          transform: rotate(-0.6deg) scale(1.01);
+        }
+      }
+
+      /* Tablets and below */
+      @media (max-width: 767.98px) {
+        :root {
+          --tile-border: 4px;
+        }
+
+        .tile {
+          box-shadow: 0 5px 12px rgba(5, 12, 28, 0.4);
+        }
+      }
+
+      /* Phones */
+      @media (max-width: 575.98px) {
+        :root {
+          --tile-border: 3px;
+        }
+
+        .tile {
+          border-radius: 3px;
+        }
+
+        .tile-banner {
+          aspect-ratio: 16 / 9;
+        }
+      }
+
+      /* Large screens: keep the grid from getting huge */
+      @media (min-width: 1800px) {
+        .container {
+          max-width: 1400px;
+        }
+      }
+
+      /* Respect reduced-motion settings */
+      @media (prefers-reduced-motion: reduce) {
+        .tile {
+          transition: none;
+        }
+      }
     </style>
   </head>
 
-  </head>
-
   <body>
-    <div class="container my-3">
-      <div class="row g-3">
-       
-        <div class="col-6">
+    <div class="container py-3 py-md-4">
+      <div class="row g-2 g-md-3">
+        <!-- Row 1: big card + 2x2 small cards (stacks on phones) -->
+        <div class="col-12 col-md-6">
           <div class="card tile tile-square">
-            <img src="img1.jpg" alt="Card 1" />
+            <img src="img1.jpg" alt="Card 1" loading="lazy" />
           </div>
         </div>
 
-        <div class="col-6">
-          <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <div class="row g-2 g-md-3">
             <div class="col-6">
               <div class="card tile tile-square">
-                <img src="img2.jpg" alt="Card 2" />
+                <img src="img2.jpg" alt="Card 2" loading="lazy" />
               </div>
             </div>
             <div class="col-6">
               <div class="card tile tile-square">
-                <img src="img3.jpg" alt="Card 3" />
+                <img src="img3.jpg" alt="Card 3" loading="lazy" />
               </div>
             </div>
             <div class="col-6">
               <div class="card tile tile-square">
-                <img src="img9.jpg" alt="Card 13" />
+                <img src="img9.jpg" alt="Card 13" loading="lazy" />
               </div>
             </div>
             <div class="col-6">
               <div class="card tile tile-square">
-                <img src="img8.jpg" alt="Card 14" />
+                <img src="img8.jpg" alt="Card 14" loading="lazy" />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-4">
+        <!-- Row 2: 1 wide + 2 side by side on phones, 3 across on tablets and up -->
+        <div class="col-12 col-md-4">
           <div class="card tile tile-wide">
-            <img src="img15.jpg" alt="Card 4" />
+            <img src="img15.jpg" alt="Card 4" loading="lazy" />
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-6 col-md-4">
           <div class="card tile tile-wide">
-            <img src="img14.jfif" alt="Card 5" />
+            <img src="img14.jfif" alt="Card 5" loading="lazy" />
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-6 col-md-4">
           <div class="card tile tile-wide">
-            <img src="img6.jpg" alt="Card 6" />
+            <img src="img6.jpg" alt="Card 6" loading="lazy" />
           </div>
         </div>
 
-  
-        <div class="col-3">
+        <!-- Row 3: 2x2 on phones, 4 across on tablets and up -->
+        <div class="col-6 col-md-3">
           <div class="card tile tile-square">
-            <img src="img12.jfif" alt="Card 7" />
+            <img src="img12.jfif" alt="Card 7" loading="lazy" />
           </div>
         </div>
-        <div class="col-3">
+        <div class="col-6 col-md-3">
           <div class="card tile tile-square">
-            <img src="img10.jfif" alt="Card 8" />
+            <img src="img10.jfif" alt="Card 8" loading="lazy" />
           </div>
         </div>
-        <div class="col-3">
+        <div class="col-6 col-md-3">
           <div class="card tile tile-square">
-            <img src="img11.jfif" alt="Card 9" />
+            <img src="img11.jfif" alt="Card 9" loading="lazy" />
           </div>
         </div>
-        <div class="col-3">
+        <div class="col-6 col-md-3">
           <div class="card tile tile-square">
-            <img src="img13.jfif" alt="Card 10" />
+            <img src="img13.jfif" alt="Card 10" loading="lazy" />
           </div>
         </div>
 
-
-        <div class="col-6">
+        <!-- Row 4: stacked on phones, side by side from 576px up -->
+        <div class="col-12 col-sm-6">
           <div class="card tile tile-banner">
-            <img src="img4.jpg" alt="Card 11" />
+            <img src="img4.jpg" alt="Card 11" loading="lazy" />
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
           <div class="card tile tile-banner">
-            <img src="img5.jpg" alt="Card 12" />
+            <img src="img5.jpg" alt="Card 12" loading="lazy" />
           </div>
         </div>
       </div>
