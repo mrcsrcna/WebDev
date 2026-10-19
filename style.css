@@ -775,7 +775,7 @@ html[data-theme="dark"] .visual-caption {
   }
 }
 
-/* Repository shortcut in the navigation */
+
 .nav-repo-link {
   display: inline-flex;
   align-items: center;
@@ -807,7 +807,7 @@ html[data-theme="dark"] .visual-caption {
   }
 }
 
-/* Replaceable logo image */
+
 .site-logo {
   display: block;
   width: 48px;
