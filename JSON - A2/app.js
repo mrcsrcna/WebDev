@@ -6,9 +6,10 @@
    ========================================================================== */
 
 const TRANSITION_MS = 350;
-const LOADER_MIN_MS = 1100;          // let the start-lights play out
+const LOADER_MIN_MS = 1100; // let the start-lights play out
 const PHOTO_LABELS = ["Car", "Driver", "Helmet"];
-const STATS_NOTE = "Season statistics after Round 17. Edit drivers.json to update them.";
+const STATS_NOTE =
+  "Season statistics after Round 17. Edit drivers.json to update them.";
 
 let allDrivers = [];
 let activeDriver = 0;
@@ -16,7 +17,7 @@ let activePhoto = 0;
 let isAnimating = false;
 
 let filterTeam = "ALL";
-let sortMode = "grid";               // "grid" | "points"
+let sortMode = "grid"; // "grid" | "points"
 
 const $ = (id) => document.getElementById(id);
 
@@ -29,7 +30,9 @@ const centerMedia = $("center-media");
 const rightPanel = $("right-panel");
 const otherGrid = $("other-grid");
 
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
 
 /* --------------------------------------------------------------------------
    Helpers
@@ -90,11 +93,16 @@ function positionOf(driver) {
 }
 
 function leaderPoints() {
-  return allDrivers.reduce((max, d) => Math.max(max, Number(pointsOf(d)) || 0), 0);
+  return allDrivers.reduce(
+    (max, d) => Math.max(max, Number(pointsOf(d)) || 0),
+    0,
+  );
 }
 
 function teammateOf(driver) {
-  return allDrivers.find((d) => d.team === driver.team && d.id !== driver.id) || null;
+  return (
+    allDrivers.find((d) => d.team === driver.team && d.id !== driver.id) || null
+  );
 }
 
 /* Animated number: counts from the previous value (or `from`) to the new one */
@@ -109,9 +117,12 @@ function setStat(id, value, { from = null, prefix = "" } = {}) {
   }
 
   const end = Number(value);
-  const start = from !== null
-    ? from
-    : el.dataset.val !== undefined ? Number(el.dataset.val) : 0;
+  const start =
+    from !== null
+      ? from
+      : el.dataset.val !== undefined
+        ? Number(el.dataset.val)
+        : 0;
 
   el.dataset.val = end;
   cancelAnimationFrame(el._raf);
@@ -128,9 +139,10 @@ function setStat(id, value, { from = null, prefix = "" } = {}) {
     const p = Math.min(1, (now - t0) / duration);
     const eased = 1 - Math.pow(1 - p, 3);
 
-    el.textContent = p < 1
-      ? `${prefix}${Math.round(start + (end - start) * eased)}`
-      : `${prefix}${end}`;
+    el.textContent =
+      p < 1
+        ? `${prefix}${Math.round(start + (end - start) * eased)}`
+        : `${prefix}${end}`;
 
     if (p < 1) el._raf = requestAnimationFrame(step);
   };
@@ -145,7 +157,7 @@ function imageSources(driver, order) {
   return order
     .map((i) => ({
       src: driver.images[i],
-      focus: driver.focus?.[i] || ""
+      focus: driver.focus?.[i] || "",
     }))
     .filter((item) => item.src);
 }
@@ -197,7 +209,9 @@ function setImage(img, src, alt) {
 }
 
 function renderPhotos(driver) {
-  photoStrip.innerHTML = driver.images.map((src, i) => `
+  photoStrip.innerHTML = driver.images
+    .map(
+      (src, i) => `
     <button
       class="photo-thumb${i === activePhoto ? " active" : ""}"
       data-pi="${i}"
@@ -208,7 +222,9 @@ function renderPhotos(driver) {
         <img alt="${escHtml(PHOTO_LABELS[i])}" loading="lazy" draggable="false">
       </span>
     </button>
-  `).join("");
+  `,
+    )
+    .join("");
 
   photoStrip.querySelectorAll(".photo-thumb").forEach((button) => {
     const i = Number(button.dataset.pi);
@@ -224,7 +240,7 @@ function showPhoto() {
   setImage(
     centerImg,
     driver.images[activePhoto],
-    `${driver.name} — ${PHOTO_LABELS[activePhoto]}`
+    `${driver.name} — ${PHOTO_LABELS[activePhoto]}`,
   );
 
   $("image-category").textContent =
@@ -244,10 +260,13 @@ function switchPhoto(index) {
   activePhoto = index;
   centerShowcase.classList.add("fading");
 
-  window.setTimeout(() => {
-    showPhoto();
-    centerShowcase.classList.remove("fading");
-  }, reducedMotion ? 0 : TRANSITION_MS);
+  window.setTimeout(
+    () => {
+      showPhoto();
+      centerShowcase.classList.remove("fading");
+    },
+    reducedMotion ? 0 : TRANSITION_MS,
+  );
 }
 
 function cyclePhoto(direction = 1) {
@@ -295,7 +314,8 @@ function renderTeammate(driver) {
   $("battle-mate").dataset.id = mate.id;
 
   const total = mine + theirs;
-  $("battle-me-bar").style.width = `${total === 0 ? 50 : (mine / total) * 100}%`;
+  $("battle-me-bar").style.width =
+    `${total === 0 ? 50 : (mine / total) * 100}%`;
 }
 
 function renderStats(driver, { fromZero = false } = {}) {
@@ -303,8 +323,8 @@ function renderStats(driver, { fromZero = false } = {}) {
 
   const pos = positionOf(driver);
   setStat("stat-position", pos, {
-    from: pos === null ? null : Number(pos),   // rank never counts up from 0
-    prefix: "P"
+    from: pos === null ? null : Number(pos), // rank never counts up from 0
+    prefix: "P",
   });
   setStat("stat-points", pointsOf(driver), { from });
   setStat("stat-wins", statOf(driver, "wins"), { from });
@@ -355,7 +375,7 @@ function renderDriver() {
    -------------------------------------------------------------------------- */
 function visibleDrivers() {
   const list = allDrivers.filter(
-    (d) => filterTeam === "ALL" || d.team === filterTeam
+    (d) => filterTeam === "ALL" || d.team === filterTeam,
   );
 
   if (sortMode === "points") {
@@ -381,25 +401,32 @@ function buildFilters() {
 
   const chips = [{ name: "ALL", color: "#ffffff" }, ...teams];
 
-  $("team-filters").innerHTML = chips.map((t) => `
+  $("team-filters").innerHTML = chips
+    .map(
+      (t) => `
     <button type="button"
             class="chip${t.name === filterTeam ? " active" : ""}"
             data-team="${escHtml(t.name)}">
       <i></i>${escHtml(t.name)}
     </button>
-  `).join("");
+  `,
+    )
+    .join("");
 
-  $("team-filters").querySelectorAll(".chip").forEach((chip, i) => {
-    chip.style.setProperty("--team", chips[i].color);
-  });
+  $("team-filters")
+    .querySelectorAll(".chip")
+    .forEach((chip, i) => {
+      chip.style.setProperty("--team", chips[i].color);
+    });
 }
 
 function renderOtherDrivers({ animate = true } = {}) {
   const list = visibleDrivers();
 
-  $("driver-count").textContent = list.length === allDrivers.length
-    ? `${allDrivers.length} DRIVERS`
-    : `${list.length} OF ${allDrivers.length} DRIVERS`;
+  $("driver-count").textContent =
+    list.length === allDrivers.length
+      ? `${allDrivers.length} DRIVERS`
+      : `${list.length} OF ${allDrivers.length} DRIVERS`;
 
   otherGrid.classList.toggle("no-anim", !animate);
 
@@ -408,11 +435,12 @@ function renderOtherDrivers({ animate = true } = {}) {
     return;
   }
 
-  otherGrid.innerHTML = list.map((driver, n) => {
-    const pos = positionOf(driver);
-    const pts = pointsOf(driver);
+  otherGrid.innerHTML = list
+    .map((driver, n) => {
+      const pos = positionOf(driver);
+      const pts = pointsOf(driver);
 
-    return `
+      return `
       <button
         class="other-thumb${driver.id === allDrivers[activeDriver]?.id ? " active" : ""}"
         type="button"
@@ -434,7 +462,8 @@ function renderOtherDrivers({ animate = true } = {}) {
         </span>
       </button>
     `;
-  }).join("");
+    })
+    .join("");
 
   otherGrid.querySelectorAll(".other-thumb").forEach((button) => {
     const driver = allDrivers.find((d) => d.id === button.dataset.id);
@@ -443,7 +472,9 @@ function renderOtherDrivers({ animate = true } = {}) {
     bindMedia(button.querySelector(".media"), imageSources(driver, [2, 0, 1]));
     button.style.setProperty("--team", driver.accent_color || "#e10600");
 
-    button.addEventListener("click", () => switchDriver(indexOfId(driver.id), true));
+    button.addEventListener("click", () =>
+      switchDriver(indexOfId(driver.id), true),
+    );
   });
 
   attachTilt(otherGrid.querySelectorAll(".other-thumb"));
@@ -485,7 +516,9 @@ async function switchDriver(index, fromLineup = false) {
 
   isAnimating = true;
 
-  const clicked = otherGrid.querySelector(`[data-id="${allDrivers[index].id}"]`);
+  const clicked = otherGrid.querySelector(
+    `[data-id="${allDrivers[index].id}"]`,
+  );
   if (clicked) clicked.classList.add("loading");
 
   centerShowcase.classList.add("fading");
@@ -497,7 +530,7 @@ async function switchDriver(index, fromLineup = false) {
     if (top < 0) {
       $("showcase").scrollIntoView({
         behavior: reducedMotion ? "auto" : "smooth",
-        block: "start"
+        block: "start",
       });
     }
   }
@@ -543,7 +576,10 @@ function renderTicker() {
     return;
   }
 
-  const items = (hidden) => ranked.map((d) => `
+  const items = (hidden) =>
+    ranked
+      .map(
+        (d) => `
     <button type="button" class="ticker-item" data-id="${escHtml(d.id)}"
             ${hidden ? 'tabindex="-1" aria-hidden="true"' : ""}>
       <span class="t-pos">P${escHtml(positionOf(d))}</span>
@@ -551,7 +587,9 @@ function renderTicker() {
       <span>${escHtml(d.code || d.name.split(" ").pop().toUpperCase())}</span>
       <span class="t-pts">${displayStat(pointsOf(d))}</span>
     </button>
-  `).join("");
+  `,
+      )
+      .join("");
 
   const track = $("ticker-track");
   track.innerHTML = items(false) + items(true);
@@ -584,8 +622,7 @@ function attachTilt(elements) {
       const x = (e.clientX - r.left) / r.width - 0.5;
       const y = (e.clientY - r.top) / r.height - 0.5;
 
-      el.style.transform =
-        `perspective(700px) translateY(-4px) rotateX(${(-y * 7).toFixed(2)}deg) rotateY(${(x * 9).toFixed(2)}deg)`;
+      el.style.transform = `perspective(700px) translateY(-4px) rotateX(${(-y * 7).toFixed(2)}deg) rotateY(${(x * 9).toFixed(2)}deg)`;
     });
 
     el.addEventListener("pointerleave", () => {
@@ -604,8 +641,14 @@ function bindEvents() {
     if (reducedMotion || e.pointerType !== "mouse") return;
 
     const r = frame.getBoundingClientRect();
-    centerMedia.style.setProperty("--px", `${(-((e.clientX - r.left) / r.width - 0.5) * 16).toFixed(1)}px`);
-    centerMedia.style.setProperty("--py", `${(-((e.clientY - r.top) / r.height - 0.5) * 10).toFixed(1)}px`);
+    centerMedia.style.setProperty(
+      "--px",
+      `${(-((e.clientX - r.left) / r.width - 0.5) * 16).toFixed(1)}px`,
+    );
+    centerMedia.style.setProperty(
+      "--py",
+      `${(-((e.clientY - r.top) / r.height - 0.5) * 10).toFixed(1)}px`,
+    );
   });
 
   frame.addEventListener("pointerleave", () => {
@@ -661,9 +704,11 @@ function bindEvents() {
 
     filterTeam = chip.dataset.team;
 
-    $("team-filters").querySelectorAll(".chip").forEach((c) => {
-      c.classList.toggle("active", c === chip);
-    });
+    $("team-filters")
+      .querySelectorAll(".chip")
+      .forEach((c) => {
+        c.classList.toggle("active", c === chip);
+      });
 
     renderOtherDrivers();
     updateCounter();
@@ -723,8 +768,8 @@ async function init() {
       images: [
         driver.images?.[0] || "",
         driver.images?.[1] || "",
-        driver.images?.[2] || ""
-      ]
+        driver.images?.[2] || "",
+      ],
     }));
 
     $("series-title").textContent = data.title || "GRIDLINE";
