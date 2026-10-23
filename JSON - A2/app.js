@@ -1,15 +1,8 @@
 "use strict";
 
-/* ==========================================================================
-   GRIDLINE — UI logic
-   Data: drivers.json (profiles, images, season stats) — fully static
-   ========================================================================== */
-
 const TRANSITION_MS = 350;
-const LOADER_MIN_MS = 1100; // let the start-lights play out
+const LOADER_MIN_MS = 1100; 
 const PHOTO_LABELS = ["Car", "Driver", "Helmet"];
-const STATS_NOTE =
-  "Season statistics after Round 17. Edit drivers.json to update them.";
 
 let allDrivers = [];
 let activeDriver = 0;
@@ -34,9 +27,7 @@ const reducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 ).matches;
 
-/* --------------------------------------------------------------------------
-   Helpers
-   -------------------------------------------------------------------------- */
+
 function escHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -105,7 +96,6 @@ function teammateOf(driver) {
   );
 }
 
-/* Animated number: counts from the previous value (or `from`) to the new one */
 function setStat(id, value, { from = null, prefix = "" } = {}) {
   const el = $(id);
 
@@ -150,9 +140,7 @@ function setStat(id, value, { from = null, prefix = "" } = {}) {
   el._raf = requestAnimationFrame(step);
 }
 
-/* --------------------------------------------------------------------------
-   Images — every photo lives inside the same landscape .media frame
-   -------------------------------------------------------------------------- */
+
 function imageSources(driver, order) {
   return order
     .map((i) => ({
@@ -162,8 +150,7 @@ function imageSources(driver, order) {
     .filter((item) => item.src);
 }
 
-/* Loads the first source that works; otherwise shows the "photo pending"
-   placeholder (which prints the file name you need to add). */
+
 function bindMedia(media, sources) {
   const img = media.querySelector("img");
   let n = 0;
@@ -274,9 +261,7 @@ function cyclePhoto(direction = 1) {
   switchPhoto((activePhoto + direction + count) % count);
 }
 
-/* --------------------------------------------------------------------------
-   Right panel: profile + stats
-   -------------------------------------------------------------------------- */
+
 function renderGap(driver) {
   const pts = Number(pointsOf(driver));
   const leader = leaderPoints();
@@ -370,9 +355,7 @@ function renderDriver() {
   markActive();
 }
 
-/* --------------------------------------------------------------------------
-   Lineup ("Explore the grid"): filter, sort, cards
-   -------------------------------------------------------------------------- */
+
 function visibleDrivers() {
   const list = allDrivers.filter(
     (d) => filterTeam === "ALL" || d.team === filterTeam,
@@ -484,7 +467,6 @@ function indexOfId(id) {
   return allDrivers.findIndex((d) => d.id === id);
 }
 
-/* Highlight the active driver everywhere (cards, ticker, counter) */
 function markActive() {
   const id = allDrivers[activeDriver]?.id;
 
@@ -524,7 +506,7 @@ async function switchDriver(index, fromLineup = false) {
   centerShowcase.classList.add("fading");
   rightPanel.classList.add("fading");
 
-  // From the lineup, bring the showcase back into view
+  
   if (fromLineup) {
     const top = $("showcase").getBoundingClientRect().top;
     if (top < 0) {
@@ -561,9 +543,7 @@ function stepDriver(direction) {
   switchDriver(indexOfId(next.id));
 }
 
-/* --------------------------------------------------------------------------
-   Ticker (championship order)
-   -------------------------------------------------------------------------- */
+
 function renderTicker() {
   const ranked = allDrivers
     .filter((d) => positionOf(d) !== null)
@@ -608,9 +588,7 @@ function renderTicker() {
   markActive();
 }
 
-/* --------------------------------------------------------------------------
-   Interaction: tilt / parallax, swipe, keyboard, filters
-   -------------------------------------------------------------------------- */
+
 function attachTilt(elements) {
   if (reducedMotion) return;
 
@@ -691,13 +669,13 @@ function bindEvents() {
     stepDriver(1);
   });
 
-  // Teammate battle: jump to the teammate
+
   $("battle-mate").addEventListener("click", (e) => {
     const id = e.currentTarget.dataset.id;
     if (id) switchDriver(indexOfId(id));
   });
 
-  // Team filters
+
   $("team-filters").addEventListener("click", (e) => {
     const chip = e.target.closest(".chip");
     if (!chip) return;
@@ -714,7 +692,7 @@ function bindEvents() {
     updateCounter();
   });
 
-  // Sort toggle
+
   document.querySelectorAll(".sort-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       sortMode = btn.dataset.sort;
@@ -728,7 +706,7 @@ function bindEvents() {
     });
   });
 
-  // Keyboard
+  
   document.addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
@@ -745,9 +723,7 @@ function bindEvents() {
   });
 }
 
-/* --------------------------------------------------------------------------
-   Boot
-   -------------------------------------------------------------------------- */
+
 async function init() {
   try {
     const started = performance.now();

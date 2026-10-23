@@ -1,7 +1,3 @@
-/* ==========================================================================
-   GRIDLINE — F1 2026 showcase
-   Fonts:  Saira (display, italic caps)  ·  Titillium Web (body / timing)
-   ========================================================================== */
 
 :root {
   --accent: #e10600;
@@ -17,13 +13,7 @@
   --font-display: "Saira", "Arial Narrow", "Segoe UI", sans-serif;
   --font-body: "Titillium Web", "Segoe UI", system-ui, sans-serif;
 
-  /* ------------------------------------------------------------------
-     ONE LANDSCAPE SIZE FOR EVERY PHOTO
-     Used by: lineup cards ("Explore the grid"), gallery thumbnails and the
-     main driver frame. Change it here and everything follows.
-     Any photo you add is cropped to this frame (object-fit: cover).
-     Fine-tune a single photo with "focus" in drivers.json.
-     ------------------------------------------------------------------ */
+ 
   --frame-ratio: 16 / 9;
   --frame-focus: 50% 35%;
 }
@@ -44,7 +34,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* carbon-fibre weave */
+
 body::before {
   content: "";
   position: fixed;
@@ -80,7 +70,7 @@ kbd {
   transition: background .5s ease;
 }
 
-/* ---------- Loader: F1 start lights ---------- */
+
 #loader {
   position: fixed;
   inset: 0;
@@ -141,7 +131,7 @@ kbd {
   color: #aaa;
 }
 
-/* ---------- Header ---------- */
+
 .site-header {
   position: relative;
   padding: 30px 0 24px;
@@ -149,7 +139,7 @@ kbd {
   overflow: hidden;
 }
 
-/* speed stripes */
+
 .site-header::after {
   content: "";
   position: absolute;
@@ -229,7 +219,7 @@ kbd {
   box-shadow: 0 0 10px var(--accent);
 }
 
-/* ---------- Ticker ---------- */
+
 .ticker {
   display: flex;
   align-items: stretch;
@@ -296,7 +286,7 @@ kbd {
 .ticker-item .t-pts { color: var(--muted); font-variant-numeric: tabular-nums; }
 .ticker-item.active .t-pts { color: var(--text); }
 
-/* ---------- Section headings ---------- */
+
 .section-heading { padding: 44px 0 26px; }
 
 .section-heading h2,
@@ -325,7 +315,6 @@ kbd {
 
 @media (hover: none) { .kbd-hint { display: none; } }
 
-/* ---------- Showcase ---------- */
 .showcase { padding-bottom: 35px; }
 
 .photo-column { padding-top: 8px; }
@@ -439,7 +428,7 @@ kbd {
   transition: transform .25s ease-out, opacity .3s ease;
 }
 
-#center-media::before {  /* bottom fade so the arrows / counter stay legible */
+#center-media::before {  
   content: "";
   position: absolute;
   inset: auto 0 0 0;
@@ -520,7 +509,7 @@ kbd {
   opacity: .85;
 }
 
-/* ---------- Right panel ---------- */
+
 #right-panel {
   padding: 6px 0;
   transition: opacity .35s ease, transform .35s ease;
@@ -717,7 +706,7 @@ kbd {
   line-height: 1.5;
 }
 
-/* ---------- Lineup ---------- */
+
 .other-section {
   padding: 38px 0 65px;
   border-top: 1px solid var(--border);
@@ -837,7 +826,7 @@ kbd {
   to   { opacity: 1; transform: none; }
 }
 
-.other-thumb::before {   /* team colour bar */
+.other-thumb::before {   
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -936,7 +925,7 @@ kbd {
   text-align: center;
 }
 
-/* ---------- Footer ---------- */
+
 footer {
   border-top: 1px solid var(--border);
   background: #05070a;
@@ -966,7 +955,7 @@ footer .container-xl {
   text-shadow: 2px 2px 0 var(--accent);
 }
 
-/* ---------- Responsive ---------- */
+
 @media (min-width: 992px) {
   .photo-column { width: 140px; }
 }
