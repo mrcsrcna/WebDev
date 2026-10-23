@@ -1,7 +1,7 @@
 "use strict";
 
 const TRANSITION_MS = 350;
-const LOADER_MIN_MS = 1100; 
+const LOADER_MIN_MS = 1100;
 const PHOTO_LABELS = ["Car", "Driver", "Helmet"];
 
 let allDrivers = [];
@@ -26,7 +26,6 @@ const otherGrid = $("other-grid");
 const reducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 ).matches;
-
 
 function escHtml(value) {
   return String(value ?? "")
@@ -140,7 +139,6 @@ function setStat(id, value, { from = null, prefix = "" } = {}) {
   el._raf = requestAnimationFrame(step);
 }
 
-
 function imageSources(driver, order) {
   return order
     .map((i) => ({
@@ -149,7 +147,6 @@ function imageSources(driver, order) {
     }))
     .filter((item) => item.src);
 }
-
 
 function bindMedia(media, sources) {
   const img = media.querySelector("img");
@@ -261,7 +258,6 @@ function cyclePhoto(direction = 1) {
   switchPhoto((activePhoto + direction + count) % count);
 }
 
-
 function renderGap(driver) {
   const pts = Number(pointsOf(driver));
   const leader = leaderPoints();
@@ -320,8 +316,6 @@ function renderStats(driver, { fromZero = false } = {}) {
 
   renderGap(driver);
   renderTeammate(driver);
-
-  $("stats-note").textContent = STATS_NOTE;
 }
 
 function renderDriver() {
@@ -354,7 +348,6 @@ function renderDriver() {
   updateCounter();
   markActive();
 }
-
 
 function visibleDrivers() {
   const list = allDrivers.filter(
@@ -506,7 +499,6 @@ async function switchDriver(index, fromLineup = false) {
   centerShowcase.classList.add("fading");
   rightPanel.classList.add("fading");
 
-  
   if (fromLineup) {
     const top = $("showcase").getBoundingClientRect().top;
     if (top < 0) {
@@ -542,7 +534,6 @@ function stepDriver(direction) {
 
   switchDriver(indexOfId(next.id));
 }
-
 
 function renderTicker() {
   const ranked = allDrivers
@@ -587,7 +578,6 @@ function renderTicker() {
   wrap.hidden = false;
   markActive();
 }
-
 
 function attachTilt(elements) {
   if (reducedMotion) return;
@@ -669,12 +659,10 @@ function bindEvents() {
     stepDriver(1);
   });
 
-
   $("battle-mate").addEventListener("click", (e) => {
     const id = e.currentTarget.dataset.id;
     if (id) switchDriver(indexOfId(id));
   });
-
 
   $("team-filters").addEventListener("click", (e) => {
     const chip = e.target.closest(".chip");
@@ -692,7 +680,6 @@ function bindEvents() {
     updateCounter();
   });
 
-
   document.querySelectorAll(".sort-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       sortMode = btn.dataset.sort;
@@ -706,7 +693,6 @@ function bindEvents() {
     });
   });
 
-  
   document.addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
@@ -722,7 +708,6 @@ function bindEvents() {
     }
   });
 }
-
 
 async function init() {
   try {
