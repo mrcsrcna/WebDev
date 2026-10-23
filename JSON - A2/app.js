@@ -2,13 +2,13 @@
 
 /* ==========================================================================
    GRIDLINE — UI logic
-   Data:   drivers.json (profiles, images, fallback stats)
-   Live:   live.js      (season stats from the Jolpica F1 API)
+   Data: drivers.json (profiles, images, season stats) — fully static
    ========================================================================== */
 
 const TRANSITION_MS = 350;
 const LOADER_MIN_MS = 1100;          // let the start-lights play out
 const PHOTO_LABELS = ["Car", "Driver", "Helmet"];
+const STATS_NOTE = "Season statistics after Round 17. Edit drivers.json to update them.";
 
 let allDrivers = [];
 let activeDriver = 0;
@@ -17,8 +17,6 @@ let isAnimating = false;
 
 let filterTeam = "ALL";
 let sortMode = "grid";               // "grid" | "points"
-let liveData = null;                 // latest payload from live.js
-let liveStatus = "connecting";
 
 const $ = (id) => document.getElementById(id);
 
@@ -78,17 +76,8 @@ function applyAccent(hex) {
   if (meta) meta.content = "#07090c";
 }
 
-function flash(el) {
-  if (!el || reducedMotion) return;
-  el.classList.remove("flash");
-  void el.offsetWidth;             // restart the animation
-  el.classList.add("flash");
-}
-
-/* Live value first, then the fallback value from drivers.json */
+/* Stats come straight from drivers.json */
 function statOf(driver, key) {
-  const live = driver.live?.[key];
-  if (live !== null && live !== undefined) return live;
   return driver.stats?.[key] ?? null;
 }
 
@@ -269,32 +258,6 @@ function cyclePhoto(direction = 1) {
 /* --------------------------------------------------------------------------
    Right panel: profile + stats
    -------------------------------------------------------------------------- */
-function isClassified(status) {
-  return status === "Finished" || /^\+\d+ Laps?$/.test(status || "");
-}
-
-function renderLastRace(driver) {
-  const race = liveData?.lastRace;
-  const result = driver.live?.last;
-
-  if (!race || !result) {
-    $("stat-last-label").textContent = "LATEST RACE";
-    $("stat-last").textContent = "—";
-    $("stat-last-sub").textContent = race ? "Did not take part" : "Awaiting result";
-    return;
-  }
-
-  const short = race.name.replace(/ Grand Prix$/i, " GP");
-  const finished = isClassified(result.status);
-  const grid = result.grid > 0 ? `Grid P${result.grid}` : "Pit-lane start";
-
-  $("stat-last-label").textContent = `R${race.round} · ${short}`.toUpperCase();
-  $("stat-last").textContent = finished ? `P${result.position}` : "DNF";
-  $("stat-last-sub").textContent = finished
-    ? `${grid} · +${result.points} pts`
-    : `${result.status} · ${grid}`;
-}
-
 function renderGap(driver) {
   const pts = Number(pointsOf(driver));
   const leader = leaderPoints();
@@ -335,22 +298,7 @@ function renderTeammate(driver) {
   $("battle-me-bar").style.width = `${total === 0 ? 50 : (mine / total) * 100}%`;
 }
 
-function renderStatsChip() {
-  const chip = $("stats-live-chip");
-  chip.classList.remove("is-fallback", "is-cached");
-
-  if (liveStatus === "live" || liveStatus === "syncing" && liveData) {
-    chip.textContent = liveData?.round ? `LIVE · R${liveData.round}` : "LIVE";
-  } else if (liveData) {
-    chip.textContent = "CACHED";
-    chip.classList.add("is-cached");
-  } else {
-    chip.textContent = "SNAPSHOT";
-    chip.classList.add("is-fallback");
-  }
-}
-
-function renderStats(driver, { fromZero = false, changed = null } = {}) {
+function renderStats(driver, { fromZero = false } = {}) {
   const from = fromZero ? 0 : null;
 
   const pos = positionOf(driver);
@@ -366,27 +314,9 @@ function renderStats(driver, { fromZero = false, changed = null } = {}) {
   $("stats-season").textContent = driver.season || "2026";
 
   renderGap(driver);
-  renderLastRace(driver);
   renderTeammate(driver);
-  renderStatsChip();
 
-  $("stats-note").textContent = driver.live
-    ? `Live data from the Jolpica F1 API · after Round ${liveData?.round ?? "—"}. Updates automatically.`
-    : driver.stats_note || "Statistics are editable in drivers.json.";
-
-  if (changed) {
-    const map = {
-      position: "stat-position",
-      points: "stat-points",
-      wins: "stat-wins",
-      podiums: "stat-podiums",
-      poles: "stat-poles"
-    };
-
-    Object.entries(map).forEach(([key, id]) => {
-      if (changed.includes(key)) flash($(id).closest(".stat-card"));
-    });
-  }
+  $("stats-note").textContent = STATS_NOTE;
 }
 
 function renderDriver() {
@@ -641,238 +571,6 @@ function renderTicker() {
 }
 
 /* --------------------------------------------------------------------------
-   Live data: merge, status, countdown, toasts
-   -------------------------------------------------------------------------- */
-function toast(title, message) {
-  const stack = $("toast-stack");
-  const el = document.createElement("div");
-
-  el.className = "toast";
-  el.innerHTML = `<b>${escHtml(title)}</b>${escHtml(message)}`;
-  stack.appendChild(el);
-
-  window.setTimeout(() => {
-    el.classList.add("out");
-    window.setTimeout(() => el.remove(), 320);
-  }, 7000);
-
-  while (stack.children.length > 3) stack.firstChild.remove();
-}
-
-function applyLive(data, meta = {}) {
-  const hadLive = allDrivers.some((d) => d.live);
-  const previousRound = liveData?.round;
-  const changedByDriver = new Map();
-  const gains = [];
-
-  liveData = data;
-
-  allDrivers.forEach((driver) => {
-    const id = driver.api_id || driver.id;
-    const s = data.standings?.[id];
-    const prev = driver.live;
-
-    driver.live = s
-      ? {
-          position: s.position,
-          points: s.points,
-          wins: s.wins,
-          podiums: data.podiums ? data.podiums[id] ?? 0 : null,
-          poles: data.poles ? data.poles[id] ?? 0 : null,
-          last: data.lastRace?.results?.[id] || null
-        }
-      : null;
-
-    if (prev && driver.live) {
-      const diff = ["position", "points", "wins", "podiums", "poles"]
-        .filter((k) => prev[k] !== driver.live[k]);
-
-      if (diff.length) changedByDriver.set(driver.id, diff);
-
-      const gained = driver.live.points - prev.points;
-      if (gained > 0) gains.push({ driver, gained });
-    }
-  });
-
-  // Rebuild what depends on the numbers
-  renderTicker();
-
-  const needsGrid = sortMode === "points" || !hadLive || changedByDriver.size > 0;
-  if (needsGrid) renderOtherDrivers({ animate: false });
-
-  const active = allDrivers[activeDriver];
-  if (active) {
-    renderStats(active, {
-      changed: changedByDriver.get(active.id) || null
-    });
-  }
-
-  updateCounter();
-  renderSeasonBar();
-  renderRaceBlock();
-
-  // Highlight cards that moved
-  changedByDriver.forEach((_, id) => {
-    flash(otherGrid.querySelector(`[data-id="${id}"]`));
-  });
-
-  // Announce genuinely new results (not the first paint, not an unchanged poll)
-  if (hadLive && meta.changed && changedByDriver.size) {
-    gains.sort((a, b) => b.gained - a.gained);
-
-    const top = gains
-      .slice(0, 3)
-      .map((g) => `${g.driver.code || g.driver.name} +${g.gained}`)
-      .join(" · ");
-
-    const round = data.round !== previousRound ? `Round ${data.round} is in. ` : "";
-    toast("LIVE UPDATE", `${round}${top || "Standings updated"}`);
-  }
-}
-
-function formatClock(ts) {
-  return new Date(ts).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
-}
-
-function onLiveStatus(status, data) {
-  liveStatus = status;
-
-  const pill = $("live-pill");
-  const text = $("live-pill-text");
-  const refresh = $("live-refresh");
-
-  pill.classList.remove("is-syncing", "is-offline", "is-cached");
-  refresh.classList.toggle("spinning", status === "syncing");
-
-  const labels = {
-    connecting: ["CONNECTING", "is-syncing"],
-    syncing: ["SYNCING", "is-syncing"],
-    live: ["LIVE", ""],
-    cached: ["CACHED", "is-cached"],
-    offline: ["OFFLINE", "is-offline"],
-    error: ["NO LIVE DATA", "is-offline"]
-  };
-
-  const [label, cls] = labels[status] || labels.connecting;
-  text.textContent = label;
-  if (cls) pill.classList.add(cls);
-
-  if (status === "error") {
-    $("live-updated").textContent = "Showing built-in snapshot";
-  }
-
-  renderStatsChip();
-  tickClock();
-
-  if (data && status === "live") renderSeasonBar();
-}
-
-function renderSeasonBar() {
-  if (!liveData) return;
-
-  const { round, totalRounds } = liveData;
-
-  $("live-round").textContent = totalRounds
-    ? `ROUND ${round} / ${totalRounds}`
-    : `ROUND ${round}`;
-
-  $("season-progress-text").textContent = totalRounds
-    ? `${round} of ${totalRounds} races`
-    : `${round} races`;
-
-  $("season-progress-bar").style.width = totalRounds
-    ? `${Math.min(100, (round / totalRounds) * 100)}%`
-    : "0";
-}
-
-/* Next race / lights-out elapsed */
-function raceState(now = Date.now()) {
-  const schedule = liveData?.schedule || [];
-  const RACE_LENGTH = 3 * 60 * 60 * 1000;
-
-  const racing = schedule.find((r) => {
-    const start = new Date(r.start).getTime();
-    return now >= start && now < start + RACE_LENGTH;
-  });
-
-  if (racing) return { type: "racing", race: racing };
-
-  const next = schedule.find((r) => new Date(r.start).getTime() > now);
-  if (next) return { type: "next", race: next };
-
-  return { type: schedule.length ? "done" : "none" };
-}
-
-function renderRaceBlock() {
-  const state = raceState();
-  const label = $("next-race-label");
-  const name = $("next-race-name");
-
-  $("next-race-countdown").classList.toggle("is-racing", state.type === "racing");
-
-  if (state.type === "racing") {
-    label.textContent = "LIGHTS OUT · ELAPSED";
-    name.textContent = state.race.name;
-  } else if (state.type === "next") {
-    label.textContent = `NEXT RACE · ROUND ${state.race.round}`;
-    name.textContent = state.race.name;
-    name.title = new Date(state.race.start).toLocaleString([], {
-      dateStyle: "full",
-      timeStyle: "short"
-    });
-  } else if (state.type === "done") {
-    label.textContent = "SEASON";
-    name.textContent = "Season complete";
-  } else {
-    label.textContent = "NEXT RACE";
-    name.textContent = "Schedule unavailable";
-  }
-}
-
-function tickClock() {
-  const now = Date.now();
-  const state = raceState(now);
-  const countdown = $("next-race-countdown");
-
-  let ms = null;
-  if (state.type === "next") ms = new Date(state.race.start).getTime() - now;
-  if (state.type === "racing") ms = now - new Date(state.race.start).getTime();
-
-  const units = { d: "--", h: "--", m: "--", s: "--" };
-
-  if (ms !== null) {
-    const total = Math.floor(ms / 1000);
-    units.d = pad2(total / 86400);
-    units.h = pad2((total % 86400) / 3600);
-    units.m = pad2((total % 3600) / 60);
-    units.s = pad2(total % 60);
-  }
-
-  Object.entries(units).forEach(([unit, value]) => {
-    const el = countdown.querySelector(`[data-unit="${unit}"]`);
-    if (el && el.textContent !== value) el.textContent = value;
-  });
-
-  // Roll over automatically at lights-out / chequered flag
-  if (liveData && state.type !== tickClock.last) {
-    tickClock.last = state.type;
-    renderRaceBlock();
-  }
-
-  // "Updated 12s ago"
-  if (liveData?.fetchedAt && liveStatus !== "error") {
-    const secs = Math.max(0, Math.round((now - liveData.fetchedAt) / 1000));
-    const ago = secs < 60 ? `${secs}s ago` : `${Math.floor(secs / 60)}m ago`;
-    const prefix = liveStatus === "offline" ? "Offline · last sync" : "Updated";
-    $("live-updated").textContent = `${prefix} ${ago} · ${formatClock(liveData.fetchedAt)}`;
-  }
-}
-
-/* --------------------------------------------------------------------------
    Interaction: tilt / parallax, swipe, keyboard, filters
    -------------------------------------------------------------------------- */
 function attachTilt(elements) {
@@ -985,9 +683,6 @@ function bindEvents() {
     });
   });
 
-  // Manual refresh
-  $("live-refresh").addEventListener("click", () => GridlineLive.refresh());
-
   // Keyboard
   document.addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -1001,8 +696,6 @@ function bindEvents() {
       stepDriver(-1);
     } else if (["1", "2", "3"].includes(e.key)) {
       switchPhoto(Number(e.key) - 1);
-    } else if (e.key === "r" || e.key === "R") {
-      GridlineLive.refresh();
     }
   });
 }
@@ -1027,7 +720,6 @@ async function init() {
 
     allDrivers = data.drivers.map((driver) => ({
       ...driver,
-      live: null,
       images: [
         driver.images?.[0] || "",
         driver.images?.[1] || "",
@@ -1048,18 +740,6 @@ async function init() {
 
     loader.classList.add("gone");
     window.setTimeout(() => loader.remove(), 500);
-
-    window.setInterval(tickClock, 1000);
-
-    if (data.live?.enabled !== false) {
-      GridlineLive.start({
-        pollSeconds: data.live?.poll_seconds,
-        onData: applyLive,
-        onStatus: onLiveStatus
-      });
-    } else {
-      onLiveStatus("error", null);
-    }
   } catch (error) {
     console.error("Failed to load drivers.json:", error);
 
