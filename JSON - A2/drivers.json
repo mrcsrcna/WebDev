@@ -1,0 +1,604 @@
+{
+  "title": "GRIDLINE",
+  "season": 2026,
+  "live": {
+    "enabled": true,
+    "poll_seconds": 60
+  },
+  "drivers": [
+    {
+      "id": "norris",
+      "name": "Lando Norris",
+      "team": "McLaren",
+      "number": 1,
+      "code": "NOR",
+      "api_id": "norris",
+      "nationality": "British",
+      "car": "McLaren MCL40",
+      "accent_color": "#FF8000",
+      "bio": "McLaren Formula 1 driver and reigning 2025 world champion.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 6,
+        "points": 201,
+        "wins": 2,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/norris.jpg",
+        "assets/img/drivers/norris.jpg",
+        "assets/img/helmets/norris.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "piastri",
+      "name": "Oscar Piastri",
+      "team": "McLaren",
+      "number": 81,
+      "code": "PIA",
+      "api_id": "piastri",
+      "nationality": "Australian",
+      "car": "McLaren MCL40",
+      "accent_color": "#FF8000",
+      "bio": "Australian Grand Prix winner and McLaren driver.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 7,
+        "points": 138,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/piastri.jpg",
+        "assets/img/drivers/oscar.jpg",
+        "assets/img/helmets/oscar.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "russell",
+      "name": "George Russell",
+      "team": "Mercedes",
+      "number": 63,
+      "code": "RUS",
+      "api_id": "russell",
+      "nationality": "British",
+      "car": "Mercedes W17",
+      "accent_color": "#00A19C",
+      "bio": "British Grand Prix driver racing for Mercedes.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 2,
+        "points": 238,
+        "wins": 3,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/george.jpg",
+        "assets/img/drivers/george.jpg",
+        "assets/img/helmets/george.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "antonelli",
+      "name": "Kimi Antonelli",
+      "team": "Mercedes",
+      "number": 12,
+      "code": "ANT",
+      "api_id": "antonelli",
+      "nationality": "Italian",
+      "car": "Mercedes W17",
+      "accent_color": "#00A19C",
+      "bio": "Italian racing talent competing in Formula 1 with Mercedes.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 1,
+        "points": 340,
+        "wins": 8,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/kimi.jpg",
+        "assets/img/drivers/kimi.jpg",
+        "assets/img/helmets/kimi.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "verstappen",
+      "name": "Max Verstappen",
+      "team": "Red Bull Racing",
+      "number": 3,
+      "code": "VER",
+      "api_id": "max_verstappen",
+      "nationality": "Dutch",
+      "car": "Red Bull RB22",
+      "accent_color": "#3671C6",
+      "bio": "Four-time Formula 1 world champion and Red Bull driver.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 4,
+        "points": 221,
+        "wins": 2,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/max.jpg",
+        "assets/img/drivers/max.jpg",
+        "assets/img/helmets/max.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "hadjar",
+      "name": "Isack Hadjar",
+      "team": "Red Bull Racing",
+      "number": 6,
+      "code": "HAD",
+      "api_id": "hadjar",
+      "nationality": "French",
+      "car": "Red Bull RB22",
+      "accent_color": "#3671C6",
+      "bio": "French racing driver competing for Red Bull Racing.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 8,
+        "points": 97,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/isaack.jpg",
+        "assets/img/drivers/isaack.jpg",
+        "assets/img/helmets/isaack.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "leclerc",
+      "name": "Charles Leclerc",
+      "team": "Ferrari",
+      "number": 16,
+      "code": "LEC",
+      "api_id": "leclerc",
+      "nationality": "Monegasque",
+      "car": "Ferrari SF-26",
+      "accent_color": "#E8002D",
+      "bio": "Monegasque driver and long-time Ferrari competitor.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 5,
+        "points": 215,
+        "wins": 1,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/charles.jpg",
+        "assets/img/drivers/charles.jpg",
+        "assets/img/helmets/charles.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "hamilton",
+      "name": "Lewis Hamilton",
+      "team": "Ferrari",
+      "number": 44,
+      "code": "HAM",
+      "api_id": "hamilton",
+      "nationality": "British",
+      "car": "Ferrari SF-26",
+      "accent_color": "#E8002D",
+      "bio": "Seven-time Formula 1 world champion racing for Ferrari.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 3,
+        "points": 229,
+        "wins": 1,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/lewis.jpg",
+        "assets/img/drivers/lewis.jpg",
+        "assets/img/helmets/lewis.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "albon",
+      "name": "Alexander Albon",
+      "team": "Williams",
+      "number": 23,
+      "code": "ALB",
+      "api_id": "albon",
+      "nationality": "Thai",
+      "car": "Williams FW48",
+      "accent_color": "#1868DB",
+      "bio": "Thai-British racing driver competing for Williams.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 19,
+        "points": 5,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/alex.jpg",
+        "assets/img/drivers/alex.jpg",
+        "assets/img/helmets/alex.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "sainz",
+      "name": "Carlos Sainz",
+      "team": "Williams",
+      "number": 55,
+      "code": "SAI",
+      "api_id": "sainz",
+      "nationality": "Spanish",
+      "car": "Williams FW48",
+      "accent_color": "#1868DB",
+      "bio": "Spanish Formula 1 driver and race winner.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 18,
+        "points": 7,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/carlos.jpg",
+        "assets/img/drivers/carlos.jpg",
+        "assets/img/helmets/carlos.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "lawson",
+      "name": "Liam Lawson",
+      "team": "Racing Bulls",
+      "number": 30,
+      "code": "LAW",
+      "api_id": "lawson",
+      "nationality": "New Zealander",
+      "car": "Racing Bulls VCARB",
+      "accent_color": "#6692FF",
+      "bio": "New Zealand driver competing in Formula 1.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 9,
+        "points": 75,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/liam.jpg",
+        "assets/img/drivers/liam.jpg",
+        "assets/img/helmets/liam.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "lindblad",
+      "name": "Arvid Lindblad",
+      "team": "Racing Bulls",
+      "number": 41,
+      "code": "LIN",
+      "api_id": "arvid_lindblad",
+      "nationality": "British",
+      "car": "Racing Bulls VCARB",
+      "accent_color": "#6692FF",
+      "bio": "British rookie competing in Formula 1.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 11,
+        "points": 38,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/arvid.jpg",
+        "assets/img/drivers/arvid.jpg",
+        "assets/img/helmets/arvid.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "alonso",
+      "name": "Fernando Alonso",
+      "team": "Aston Martin",
+      "number": 14,
+      "code": "ALO",
+      "api_id": "alonso",
+      "nationality": "Spanish",
+      "car": "Aston Martin AMR26",
+      "accent_color": "#229971",
+      "bio": "Two-time Formula 1 world champion and veteran racer.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 17,
+        "points": 7,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/alonso.jpg",
+        "assets/img/drivers/alonso.jpg",
+        "assets/img/helmets/alonso.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "stroll",
+      "name": "Lance Stroll",
+      "team": "Aston Martin",
+      "number": 18,
+      "code": "STR",
+      "api_id": "stroll",
+      "nationality": "Canadian",
+      "car": "Aston Martin AMR26",
+      "accent_color": "#229971",
+      "bio": "Canadian racing driver competing for Aston Martin.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 21,
+        "points": 0,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/lance.jpg",
+        "assets/img/drivers/lance.jpg",
+        "assets/img/helmets/lance.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "ocon",
+      "name": "Esteban Ocon",
+      "team": "Haas",
+      "number": 31,
+      "code": "OCO",
+      "api_id": "ocon",
+      "nationality": "French",
+      "car": "Haas VF-26",
+      "accent_color": "#B6BABD",
+      "bio": "French Grand Prix winner racing for Haas.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 16,
+        "points": 7,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/esteban.jpg",
+        "assets/img/drivers/esteban.jpg",
+        "assets/img/helmets/esteban.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "bearman",
+      "name": "Oliver Bearman",
+      "team": "Haas",
+      "number": 87,
+      "code": "BEA",
+      "api_id": "bearman",
+      "nationality": "British",
+      "car": "Haas VF-26",
+      "accent_color": "#B6BABD",
+      "bio": "British racing driver competing for Haas.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 13,
+        "points": 23,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/oliver.jpg",
+        "assets/img/drivers/oliver.jpg",
+        "assets/img/helmets/oliver.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "hulkenberg",
+      "name": "Nico Hulkenberg",
+      "team": "Audi",
+      "number": 27,
+      "code": "HUL",
+      "api_id": "hulkenberg",
+      "nationality": "German",
+      "car": "Audi R26",
+      "accent_color": "#D40000",
+      "bio": "German racing driver competing with Audi in Formula 1.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 14,
+        "points": 13,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/nico.jpg",
+        "assets/img/drivers/nico.jpg",
+        "assets/img/helmets/nico.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "bortoleto",
+      "name": "Gabriel Bortoleto",
+      "team": "Audi",
+      "number": 5,
+      "code": "BOR",
+      "api_id": "bortoleto",
+      "nationality": "Brazilian",
+      "car": "Audi R26",
+      "accent_color": "#D40000",
+      "bio": "Brazilian driver competing in Formula 1 with Audi.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 15,
+        "points": 10,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/gabriel.jpg",
+        "assets/img/drivers/gabriel.jpg",
+        "assets/img/helmets/gabriel.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "gasly",
+      "name": "Pierre Gasly",
+      "team": "Alpine",
+      "number": 10,
+      "code": "GAS",
+      "api_id": "gasly",
+      "nationality": "French",
+      "car": "Alpine A526",
+      "accent_color": "#FF87BC",
+      "bio": "French Grand Prix winner driving for Alpine.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 10,
+        "points": 41,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/pierre.jpg",
+        "assets/img/drivers/pierre.jpg",
+        "assets/img/helmets/pierre.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "colapinto",
+      "name": "Franco Colapinto",
+      "team": "Alpine",
+      "number": 43,
+      "code": "COL",
+      "api_id": "colapinto",
+      "nationality": "Argentine",
+      "car": "Alpine A526",
+      "accent_color": "#FF87BC",
+      "bio": "Argentine racing driver competing for Alpine.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 12,
+        "points": 27,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/colapinto.jpg",
+        "assets/img/drivers/colapinto.jpg",
+        "assets/img/helmets/colapinto.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "perez",
+      "name": "Sergio Perez",
+      "team": "Cadillac",
+      "number": 11,
+      "code": "PER",
+      "api_id": "perez",
+      "nationality": "Mexican",
+      "car": "Cadillac F1 Car",
+      "accent_color": "#D9D9D9",
+      "bio": "Mexican Grand Prix winner racing for Cadillac.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 23,
+        "points": 0,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/perez.jpg",
+        "assets/img/drivers/perez.jpg",
+        "assets/img/helmets/perez.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    },
+    {
+      "id": "bottas",
+      "name": "Valtteri Bottas",
+      "team": "Cadillac",
+      "number": 77,
+      "code": "BOT",
+      "api_id": "bottas",
+      "nationality": "Finnish",
+      "car": "Cadillac F1 Car",
+      "accent_color": "#D9D9D9",
+      "bio": "Finnish Grand Prix winner competing for Cadillac.",
+      "profile_url": "https://www.formula1.com/",
+      "season": 2026,
+      "stats": {
+        "position": 22,
+        "points": 0,
+        "wins": 0,
+        "podiums": null,
+        "poles": null
+      },
+      "images": [
+        "assets/img/cars/bottas.jpg",
+        "assets/img/drivers/bottas.jpg",
+        "assets/img/helmets/bottas.jpg"
+      ],
+      "stats_note": "Fallback snapshot after Round 17. Live season data replaces this automatically."
+    }
+  ]
+}
