@@ -1,6 +1,5 @@
 "use strict";
-/* THE CIRCUITS: one entry per 2026 race, data in circuits.json.
-   Track outlines are schematic, not survey-accurate. */
+
 (function () {
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
