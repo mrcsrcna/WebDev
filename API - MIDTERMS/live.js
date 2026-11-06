@@ -1,6 +1,19 @@
 "use strict";
 
-
+/*
+ * GRIDLINE live data layer
+ * ------------------------
+ * Talks to the free Jolpica F1 API (the maintained successor to Ergast):
+ *   https://api.jolpi.ca/ergast/f1/
+ * No API key required. Public rate limit is ~4 req/s burst, 200 req/hour, so:
+ *   - every poll only asks for the standings (1 request)
+ *   - the heavier calls (podiums, poles, last race, next race) are repeated
+ *     only when a new round shows up in the standings, or the next race has
+ *     started
+ *   - the last good response is cached in localStorage
+ *
+ * Exposes window.GridlineLive.
+ */
 (function () {
   const BASE = "https://api.jolpi.ca/ergast/f1";
   const CACHE_KEY = "gridline.live.v1";
@@ -32,7 +45,7 @@
     }
   }
 
-
+  /* ---------- endpoints ---------- */
 
   async function fetchStandings() {
     const mr = await getJson("/current/driverStandings.json?limit=100");
@@ -173,7 +186,10 @@
     return fallback;
   });
 
-
+  /**
+   * Fetch fresh data. Pass the previous result so cheap polls can reuse the
+   * heavy parts. Throws if even the standings call fails.
+   */
   async function refresh(prev = null) {
     const base = await fetchStandings();
 
