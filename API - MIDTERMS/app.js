@@ -302,6 +302,129 @@ function renderTeammate(driver) {
     `${total === 0 ? 50 : (mine / total) * 100}%`;
 }
 
+function renderHeadToHead(driver) {
+  const section = $("h2h-section");
+  if (!section) return;
+
+  const mate = teammateOf(driver);
+  const races = liveData?.seasonResults;
+
+  if (!mate || !races || !races.length) {
+    section.hidden = true;
+    return;
+  }
+
+  const rounds = [];
+  let driverWins = 0;
+  let mateWins = 0;
+
+  races.forEach((race) => {
+    const dResult = race.results.find((r) => r.driverId === driver.api_id);
+    const mResult = race.results.find((r) => r.driverId === mate.api_id);
+
+    if (!dResult && !mResult) return;
+
+    const dPos = dResult?.position ?? Infinity;
+    const mPos = mResult?.position ?? Infinity;
+
+    let winner = null;
+    if (dPos < mPos) {
+      winner = "driver";
+      driverWins++;
+    } else if (mPos < dPos) {
+      winner = "mate";
+      mateWins++;
+    }
+
+    rounds.push({
+      round: race.round,
+      raceName: race.raceName,
+      driverPos: dResult?.positionText ?? "DNS",
+      matePos: mResult?.positionText ?? "DNS",
+      winner,
+    });
+  });
+
+  if (!rounds.length) {
+    section.hidden = true;
+    return;
+  }
+
+  section.hidden = false;
+
+  const dCode =
+    driver.code || driver.name.split(" ").pop().toUpperCase().slice(0, 3);
+  const mCode =
+    mate.code || mate.name.split(" ").pop().toUpperCase().slice(0, 3);
+
+  const pipsHtml = rounds
+    .map((r) => {
+      const cls =
+        r.winner === "driver"
+          ? "h2h-win"
+          : r.winner === "mate"
+            ? "h2h-loss"
+            : "h2h-draw";
+      return `<span class="h2h-pip ${cls}" title="R${r.round} ${escHtml(r.raceName)}\n${escHtml(dCode)} P${escHtml(r.driverPos)} vs ${escHtml(mCode)} P${escHtml(r.matePos)}"></span>`;
+    })
+    .join("");
+
+  const detailsHtml = rounds
+    .map((r) => {
+      const cls =
+        r.winner === "driver"
+          ? "h2h-row-win"
+          : r.winner === "mate"
+            ? "h2h-row-loss"
+            : "h2h-row-draw";
+      return `
+      <div class="h2h-row ${cls}">
+        <span class="h2h-round">R${String(r.round).padStart(2, "0")}</span>
+        <span class="h2h-race-name">${escHtml(r.raceName)}</span>
+        <span class="h2h-pos h2h-pos-d">P${escHtml(r.driverPos)}</span>
+        <span class="h2h-vs">vs</span>
+        <span class="h2h-pos h2h-pos-m">P${escHtml(r.matePos)}</span>
+      </div>`;
+    })
+    .join("");
+
+  section.innerHTML = `
+    <div class="h2h-header">
+      <span>HEAD TO HEAD · RACE BY RACE</span>
+    </div>
+    <div class="h2h-streak">${pipsHtml}</div>
+    <div class="h2h-score">
+      <span class="h2h-score-driver">${escHtml(dCode)} <b>${driverWins}</b></span>
+      <span class="h2h-score-sep">—</span>
+      <span class="h2h-score-mate"><b>${mateWins}</b> ${escHtml(mCode)}</span>
+    </div>
+    <button type="button" class="h2h-toggle" id="h2h-toggle" aria-expanded="false">
+      SHOW DETAILS <i class="bi bi-chevron-down"></i>
+    </button>
+    <div class="h2h-details" id="h2h-details" hidden>
+      <div class="h2h-details-header">
+        <span></span>
+        <span></span>
+        <span>${escHtml(dCode)}</span>
+        <span></span>
+        <span>${escHtml(mCode)}</span>
+      </div>
+      ${detailsHtml}
+    </div>
+  `;
+
+  $("h2h-toggle").addEventListener("click", () => {
+    const details = $("h2h-details");
+    const toggle = $("h2h-toggle");
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    details.hidden = expanded;
+    toggle.setAttribute("aria-expanded", String(!expanded));
+    toggle.innerHTML = expanded
+      ? 'SHOW DETAILS <i class="bi bi-chevron-down"></i>'
+      : 'HIDE DETAILS <i class="bi bi-chevron-up"></i>';
+  });
+}
+
 function renderStats(driver, { fromZero = false } = {}) {
   const from = fromZero ? 0 : null;
 
@@ -319,6 +442,7 @@ function renderStats(driver, { fromZero = false } = {}) {
 
   renderGap(driver);
   renderTeammate(driver);
+  renderHeadToHead(driver);
 }
 
 function renderDriver() {
@@ -800,6 +924,7 @@ function applyLive(live) {
     live.poles,
     live.last?.round,
     live.next?.round,
+    live.seasonResults?.length,
   ]);
 
   liveData = live;

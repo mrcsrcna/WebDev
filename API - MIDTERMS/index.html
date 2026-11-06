@@ -208,6 +208,8 @@
                 </div>
               </div>
             </div>
+
+            <div id="h2h-section" class="h2h-section" hidden></div>
           </section>
         </div>
       </section>
@@ -277,6 +279,22 @@
 
         <div id="other-grid" class="other-grid"></div>
       </section>
+      <section class="circuits" id="circuits" aria-label="Circuits">
+        <div class="other-section-heading">
+          <div>
+            <span class="section-kicker">THE CIRCUITS</span>
+            <h2>Every track on the calendar.</h2>
+          </div>
+          <div class="circuit-step">
+            <button type="button" id="circuit-prev" aria-label="Previous circuit"><i class="bi bi-chevron-left"></i></button>
+            <button type="button" id="circuit-next" aria-label="Next circuit"><i class="bi bi-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="circuit-layout">
+          <nav class="circuit-nav" id="circuit-nav" aria-label="Choose a circuit"></nav>
+          <article class="circuit-detail" id="circuit-detail" aria-live="polite"></article>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -291,5 +309,6 @@
 
     <script src="live.js"></script>
     <script src="app.js"></script>
+    <script src="circuits.js"></script>
   </body>
 </html>
